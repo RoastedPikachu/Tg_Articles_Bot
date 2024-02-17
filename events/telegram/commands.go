@@ -15,6 +15,8 @@ const (
 	StartCmd = "/start"
 )
 
+// TODO: Create messageSend wrapper
+
 func (p *Processor) doCmd(text string, chatID int, username string) error {
 	text = strings.TrimSpace(text)
 
