@@ -31,7 +31,7 @@ func newBasePath(token string) string {
 }
 
 func (c *Client) Updates(offset int, limit int) (updates []Update, err error) {
-	defer func() { err = e.WrapIfErr("can't get updates", err) }()
+	defer func() { err = e.WrapIfErr("Не могу получить обновления", err) }()
 
 	q := url.Values{}
 	q.Add("offset", strconv.Itoa(offset))
@@ -58,14 +58,14 @@ func (c *Client) SendMessage(chatID int, text string) error {
 
 	_, err := c.doRequest(os.Getenv("SEND_MESSAGE_METHOD"), q)
 	if err != nil {
-		return e.Wrap("can't send message", err)
+		return e.Wrap("Не могу отправить сообщение", err)
 	}
 
 	return nil
 }
 
 func (c *Client) doRequest(method string, query url.Values) (data []byte, err error) {
-	defer func() { err = e.WrapIfErr("can't do request", err) }()
+	defer func() { err = e.WrapIfErr("Не могу выполнить запрос", err) }()
 
 	u := url.URL{
 		Scheme: "https",

@@ -1,17 +1,17 @@
 package telegram
 
-const msgHelp = `I can save and keep you pages. Also I can offer you them to read.
+const msgHelp = `Я могу сохранять и хранить твои статьи. Также я могу предложить тебе их почитать.
 
-In order to save the page, just send me al link to it.
+Для того, чтобы сохранить статью просто отправь мне ссылку на неё.
 
-In order to get a random page from your list, send me command /rnd.
-Caution! After that, this page will be removed from your list!`
+Для того, чтобы получить рандомную статью из списка отправь мне команду /rnd.
+Имейте ввиду, после этого эта страница будет удалена из списка!`
 
-const msgHello = "Hi there! 👾\n\n" + msgHelp
+const msgHello = "Привет! 👾\n\n" + msgHelp
 
 const (
-	msgUnknownCommand = "Unknown command 🤔"
-	msgNoSavedPages   = "You have no saved pages 🙊"
-	msgSaved          = "Saved! 👌"
-	msgAlreadyExists  = "You have already have this page in your list 🤗"
+	msgUnknownCommand = "Неизвестная команда 🤔"
+	msgNoSavedPages   = "У вас нет сохраненных статей 🙊"
+	msgSaved          = "Статья сохранена 👌"
+	msgAlreadyExists  = "Эта статья уже есть в вашем списке 🤗"
 )

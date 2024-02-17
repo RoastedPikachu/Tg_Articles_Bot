@@ -21,7 +21,7 @@ func New(basePath string) Storage {
 }
 
 func (s *Storage) Save(page *storage.Page) (err error) {
-	defer func() { err = e.WrapIfErr("can't save page", err) }()
+	defer func() { err = e.WrapIfErr("Не могу сохранить статью", err) }()
 
 	filePath := filepath.Join(s.basePath, page.UserName)
 
@@ -51,7 +51,7 @@ func (s *Storage) Save(page *storage.Page) (err error) {
 }
 
 func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
-	defer func() { err = e.WrapIfErr("can't pick random page", err) }()
+	defer func() { err = e.WrapIfErr("Не могу взять рандомную статью", err) }()
 
 	filePath := filepath.Join(s.basePath, userName)
 
@@ -61,7 +61,7 @@ func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
 	}
 
 	if len(files) == 0 {
-		return nil, errors.New("no saved pages")
+		return nil, storage.ErrNoSavedPages
 	}
 
 	rand.Seed(time.Now().UnixNano())
@@ -76,13 +76,13 @@ func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
 func (s Storage) Remove(p *storage.Page) error {
 	fileName, err := fileName(p)
 	if err != nil {
-		return e.Wrap("can't remove page", err)
+		return e.Wrap("Не могу удалить статью", err)
 	}
 
 	filePath := filepath.Join(s.basePath, p.UserName, fileName)
 
 	if err := os.Remove(filePath); err != nil {
-		return e.Wrap(fmt.Sprintf("can't remove page: %s", filePath), err)
+		return e.Wrap(fmt.Sprintf("Не могу удалить статью: %s", filePath), err)
 	}
 
 	return nil
@@ -91,7 +91,7 @@ func (s Storage) Remove(p *storage.Page) error {
 func (s Storage) IsExist(p *storage.Page) (bool, error) {
 	fileName, err := fileName(p)
 	if err != nil {
-		return false, e.Wrap("can't find page", err)
+		return false, e.Wrap("Не могу найти статью", err)
 	}
 
 	filePath := filepath.Join(s.basePath, p.UserName, fileName)
@@ -100,7 +100,7 @@ func (s Storage) IsExist(p *storage.Page) (bool, error) {
 	case errors.Is(err, os.ErrNotExist):
 		return false, nil
 	case err != nil:
-		return false, e.Wrap(fmt.Sprintf("can't check if file %s exists", filePath), err)
+		return false, e.Wrap(fmt.Sprintf("Не могу проверить существует ли данный файл: %s", filePath), err)
 	}
 
 	return true, nil
@@ -109,7 +109,7 @@ func (s Storage) IsExist(p *storage.Page) (bool, error) {
 func (s Storage) decodePage(filePath string) (*storage.Page, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
-		return nil, e.Wrap("can't decode page", err)
+		return nil, e.Wrap("Не могу декодировать статью", err)
 	}
 
 	defer func() { _ = f.Close() }()
@@ -117,7 +117,7 @@ func (s Storage) decodePage(filePath string) (*storage.Page, error) {
 	var p storage.Page
 
 	if err := gob.NewDecoder(f).Decode(&p); err != nil {
-		return nil, e.Wrap("can't decode page", err)
+		return nil, e.Wrap("Не могу декодировать статью", err)
 	}
 
 	return &p, nil
