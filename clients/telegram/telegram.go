@@ -7,9 +7,8 @@ import (
 	"net/url"
 	"os"
 	"path"
-	"strconv"
-
 	"read-adviser-bot/lib/e"
+	"strconv"
 )
 
 type Client struct {

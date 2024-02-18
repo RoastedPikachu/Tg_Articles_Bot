@@ -55,7 +55,14 @@ func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
 
 	filePath := filepath.Join(s.basePath, userName)
 
+	if _, err := s.isFolderExists(userName); err != nil {
+		return nil, err
+	}
+
 	files, err := os.ReadDir(filePath)
+
+	fmt.Println(err)
+
 	if err != nil {
 		return nil, err
 	}
@@ -86,6 +93,16 @@ func (s Storage) Remove(p *storage.Page) error {
 	}
 
 	return nil
+}
+
+func (s Storage) isFolderExists(username string) (bool, error) {
+	folderPath := filepath.Join("filesStorage", username)
+
+	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
+		return false, e.Wrap("Вы еще не сохранили ни одной статьи", err)
+	}
+
+	return true, nil
 }
 
 func (s Storage) IsExist(p *storage.Page) (bool, error) {

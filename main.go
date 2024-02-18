@@ -1,13 +1,14 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"os"
 	tgClient "read-adviser-bot/clients/telegram"
 	"read-adviser-bot/consumer/eventConsumer"
 	"read-adviser-bot/events/telegram"
-	"read-adviser-bot/storage/files"
+	"read-adviser-bot/storage/sqlite"
 )
 
 func main() {
@@ -15,9 +16,19 @@ func main() {
 	os.Setenv("GET_UPDATES_METHOD", "getUpdates")
 	os.Setenv("SEND_MESSAGE_METHOD", "sendMessage")
 
+	//s := files.New("filesStorage")
+	s, err := sqlite.New("data/sqlite/storage.db")
+	if err != nil {
+		log.Fatalf("Не смог подключится к хранилищу: ", err)
+	}
+
+	if err := s.Init(context.TODO()); err != nil {
+		log.Fatalf("Не смог инициализировать хранилище: ", err)
+	}
+
 	eventsProcessor := telegram.New(
 		tgClient.New(os.Getenv("TG_BOT_HOST"), mustToken()),
-		files.New("storage"),
+		s,
 	)
 
 	log.Print("Cервис запущен")
