@@ -83,7 +83,7 @@ func (p *Processor) sendRandom(chatID int, username string) (err error) {
 		return p.tg.SendMessage(chatID, msgNoSavedPages)
 	}
 
-	if err := p.tg.SendMessage(chatID, msgNoSavedPages); err != nil {
+	if err := p.tg.SendMessage(chatID, page.URL); err != nil {
 		return err
 	}
 

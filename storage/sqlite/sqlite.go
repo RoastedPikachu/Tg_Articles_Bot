@@ -28,7 +28,7 @@ func New(path string) (*Storage, error) {
 }
 
 func (s *Storage) Save(ctx context.Context, page *storage.Page) error {
-	q := `INSERT INTO pages, (url, user_name) VALUES (?, ?)`
+	q := `INSERT INTO pages (url, user_name) VALUES (?, ?)`
 
 	if _, err := s.db.ExecContext(ctx, q, page.URL, page.UserName); err != nil {
 		return fmt.Errorf("Не смог сохранить статью, %w", err)
@@ -44,7 +44,7 @@ func (s Storage) PickRandom(ctx context.Context, userName string) (*storage.Page
 
 	err := s.db.QueryRowContext(ctx, q, userName).Scan(&url)
 	if err == sql.ErrNoRows {
-		return nil, nil
+		return nil, storage.ErrNoSavedPages
 	}
 
 	if err != nil {
